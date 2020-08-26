@@ -19,7 +19,21 @@ class TaskForm extends Component {
         }
     }
     onClose = () => {
-        this.props.onClose();
+        this.props.onCloseForm();
+    }
+
+    onClear = () =>{
+        this.setState({
+            name : '',
+            price: '',
+            discountCode: '',
+            Quantity: '',
+            Unit: '',
+            Origin: '',
+            Warranty : '',
+            Description: '',
+            status : false
+        });
     }
 
     onChange = (event) => {
@@ -30,11 +44,34 @@ class TaskForm extends Component {
             [name] : value 
         });
     }
-    onHandleSubmit = (event) => {
+
+    onSave = (event) => {
         event.preventDefault();
         this.props.onAddProduct(this.state);
+        this.props.onCloseForm();
+
+    }
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        if(nextProps && nextProps.updateItem){
+            this.setState({
+                name : nextProps.updateItem.productName,
+                price: nextProps.updateItem.price,
+                discountCode: nextProps.updateItem.discountCode,
+                Quantity: nextProps.updateItem.quantity,
+                Unit: nextProps.updateItem.unit,
+                Origin: nextProps.updateItem.origin,
+                Warranty : nextProps.updateItem.warranty,
+                Description: nextProps.updateItem.description,
+                status : false,
+                id: nextProps.updateItem.id
+            });
+        }else {
+            this.onClear();
+        }
     }
     render() {
+        if(!this.props.isDisplayForm) return '';
         return (
             <div className="panel panel-warning">
             <div className="panel-heading">
@@ -45,7 +82,7 @@ class TaskForm extends Component {
                 </h3>
             </div>
             <div className="panel-body">
-                <form onSubmit={this.onHandleSubmit}>
+                <form onSubmit={this.onSave}>
                     <div className="form-group">
                         <label>Name :</label>
                         <input 
@@ -95,7 +132,8 @@ class TaskForm extends Component {
                         value={this.state.Unit}
                         onChange = {this.onChange}
                         >
-                            <option value="1">pcs</option>
+                            <option value="pcs">pcs</option>
+                            <option value="cai">cai</option>
                         </select>
                     </div>
                     <div className="form-group">
@@ -152,13 +190,17 @@ class TaskForm extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-
+        isDisplayForm : state.isDisplayForm,
+        updateItem : state.updateItem
     }
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
         onAddProduct : (product) =>{
             dispatch(actions.addProduct(product));
+        },
+        onCloseForm : () => {
+            dispatch(actions.closeForm())
         }
     }
 }

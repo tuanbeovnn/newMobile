@@ -4,29 +4,22 @@ import Control from './components/Control';
 import ProductList from './components/ProductList';
 import './App.css';
 import Header from './components/Header';
+import {connect} from 'react-redux';
+import * as actions from './actions/index';
 
 class App extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-           
-            isDisplayForm : false,
+            
         }
     }
-    onToggleForm = () =>{
-        this.setState({
-            isDisplayForm : !this.isDisplayForm
-        });
-    }
-    onClose = () => {
-        this.setState({
-            isDisplayForm : false
-        });
-    }
+
+    
     render() {
-        let {isDisplayForm} = this.state;
-        let elmTaskForm = isDisplayForm ? <TaskForm onClose={ this.onClose }/> : '';
+        let {isDisplayForm} = this.props;
+        // let elmTaskForm = isDisplayForm === true ? <TaskForm /> : '';
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -34,12 +27,12 @@ class App extends Component {
                     <Header />
                 </div>
 
-                <div className= {isDisplayForm ? 'col-3' : ''}>
-                    {/* <TaskForm /> */}
-                    {elmTaskForm}
+                <div className= {isDisplayForm ? 'col-2' : ''}>
+                    <TaskForm />
+                    {/* {elmTaskForm} */}
                 </div>
 
-                <div id="layoutSidenav" className={isDisplayForm ? 'col-9' : 'col-12'}>
+                <div id="layoutSidenav" className={isDisplayForm ? 'col-10' : 'col-12'}>
                     <div id="layoutSidenav_content">
                         <div className="container-fluid">
                             <h1 className="mt-4">LIST OF PRODUCTS</h1>
@@ -51,13 +44,10 @@ class App extends Component {
                             <div className="card mb-4 mt-15">
                                 <div className="card-header"><i className="fas fa-table mr-1"></i>DataProducts</div>
                                 <div className="card-body">
-                                    <ProductList/>
-                                </div>
-                                <div>
-                                    <button type="submit" className="btn btn-primary" onClick = {this.onToggleForm}>Add</button>&nbsp;
-                                    <button type="button" className="btn btn-danger text-center">Remove</button>&nbsp;
-                                    <button type="button" className="btn btn-warning">Update</button>
-                                    
+                                    <ProductList
+                                      
+                                        onUpdate = {this.onUpdate}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -69,4 +59,19 @@ class App extends Component {
         );
     }
 }
-export default App;
+
+const mapStateToProps = state => {
+    return {
+        // chuyen state tu store thanh props cua apps
+        isDisplayForm : state.isDisplayForm
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onToggleForm : () => {
+            dispatch(actions.toggleForm())
+        }
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps) (App);

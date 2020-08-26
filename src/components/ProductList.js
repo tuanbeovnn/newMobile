@@ -4,10 +4,15 @@ import {connect} from 'react-redux';
 
 class ProductList extends Component {
     render() {
-        console.log(this.props.products);
         let { products } = this.props;
+        
         let eleTasks = products.map((product, index)=>{
-            return  <ProductItem key = {products.id} index = {index} product = {product}/>
+            return  <ProductItem 
+            key = {product.id} 
+            index = {index} 
+            product = {product}
+            onUpdate = {this.props.onUpdate}
+            />
         });
         return (
             <div className="table-responsive">
@@ -23,7 +28,8 @@ class ProductList extends Component {
                             <th>Origin</th>
                             <th>Warranty</th>
                             <th>Description</th>
-                            <th>Status</th> 
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>

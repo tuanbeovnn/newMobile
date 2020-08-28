@@ -4,11 +4,28 @@ import * as actions from './../actions/index';
 
 class Sort extends Component {
 
-    onToggleForm = () =>{
-        // this.setState({
-        //     isDisplayForm : !this.isDisplayForm
-        // });
-        this.props.onToggleForm();
+    onToggleForm = () =>{ 
+        let {updateItem} = this.props;
+        console.log(this.props.updateItem);
+        if(updateItem && updateItem.id !== '') {
+            this.props.onOpenForm();
+        }else{
+            this.props.onToggleForm();
+        }
+        this.props.onClearProduct(
+            {
+                id: '',
+                name : '',
+                price: '',
+                discountCode: '',
+                Quantity: '',
+                Unit: '',
+                Origin: '',
+                Warranty : '',
+                Description: '',
+                status : false
+            }
+        );
     }
 
     render() {
@@ -28,11 +45,11 @@ class Sort extends Component {
                                 </a>
                             </li>
                             <li>
-                                <a role="button">
+                               
                                     <span className="fa fa-sort-alpha-desc pr-5">
                                         Name Z-A
                                 </span>
-                                </a>
+                                
                             </li>
                         </ul>
                     </div>
@@ -48,7 +65,8 @@ class Sort extends Component {
 const mapStateToProps = state => {
     return {
         // chuyen state tu store thanh props cua apps
-        isDisplayForm : state.isDisplayForm
+        isDisplayForm : state.isDisplayForm,
+        updateItem : state.updateItem
     };
 };
 
@@ -56,6 +74,12 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         onToggleForm : () => {
             dispatch(actions.toggleForm())
+        },
+        onClearProduct : (item) =>{
+            dispatch(actions.saveProduct(item))
+        },
+        onOpenForm : () =>{
+            dispatch(actions.openForm())
         }
         
     };

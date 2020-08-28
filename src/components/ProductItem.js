@@ -18,7 +18,6 @@ class ProductItem extends Component {
 
     render() {
         let { product, index } = this.props;
-        console.log('product :>> ', product);
         return (
             <tr>
                 <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" /></td>
@@ -31,7 +30,7 @@ class ProductItem extends Component {
                 <td>{product.warranty} year</td>
                 <td>{product.description}</td>
                 <td className="text-center">
-                    <span className={product.status === true ? 'label label-danger' : 'label label-success'}>
+                    <span className={product.status === true ? 'badge badge-danger' : 'badge badge-success'}>
                         {product.status === true ? 'In Stock' : 'Out of Stock'}
                     </span>
                 </td>
@@ -66,7 +65,7 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(actions.openForm())
         },
         onUpdateItem : (item) =>{
-            dispatch(actions.updatedItem(item))
+            dispatch(actions.saveProduct(item))
         }
     };
 }

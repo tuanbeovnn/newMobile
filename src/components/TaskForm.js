@@ -7,6 +7,7 @@ class TaskForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: '',
             name : '',
             price: '',
             discountCode: '',
@@ -16,14 +17,15 @@ class TaskForm extends Component {
             Warranty : '',
             Description: '',
             status : false
-        }
+        };
     }
     onClose = () => {
         this.props.onCloseForm();
     }
 
-    onClear = () =>{
+    onClear = () => {
         this.setState({
+            id: '',
             name : '',
             price: '',
             discountCode: '',
@@ -44,10 +46,27 @@ class TaskForm extends Component {
             [name] : value 
         });
     }
-
+    componentWillMount() {
+        if(this.props.updateItem && this.props.updateItem.id){
+            this.setState({
+                id: this.props.updateItem.id,
+                name : this.props.updateItem.productName,
+                price: this.props.updateItem.price,
+                discountCode: this.props.updateItem.discountCode,
+                Quantity: this.props.updateItem.quantity,
+                Unit: this.props.updateItem.unit,
+                Origin: this.props.updateItem.origin,
+                Warranty : this.props.updateItem.warranty,
+                Description: this.props.updateItem.description,
+                status : this.props.updateItem.status
+            });
+        }else {
+            this.onClear();
+        }
+    }
     onSave = (event) => {
-        event.preventDefault();
-        this.props.onAddProduct(this.state);
+        event.preventDefault(); 
+        this.props.onSaveProduct(this.state);
         this.props.onCloseForm();
 
     }
@@ -55,6 +74,7 @@ class TaskForm extends Component {
         console.log(nextProps);
         if(nextProps && nextProps.updateItem){
             this.setState({
+                id: nextProps.updateItem.id,
                 name : nextProps.updateItem.productName,
                 price: nextProps.updateItem.price,
                 discountCode: nextProps.updateItem.discountCode,
@@ -63,19 +83,20 @@ class TaskForm extends Component {
                 Origin: nextProps.updateItem.origin,
                 Warranty : nextProps.updateItem.warranty,
                 Description: nextProps.updateItem.description,
-                status : false,
-                id: nextProps.updateItem.id
+                status : nextProps.updateItem.status
+                
             });
         }else {
             this.onClear();
         }
     }
     render() {
-        if(!this.props.isDisplayForm) return '';
+        if(!this.props.isDisplayForm) return null;
         return (
             <div className="panel panel-warning">
             <div className="panel-heading">
-                <h3 className="panel-title">ADD PRODUCT
+                <h3 className="panel-title">
+                    {!this.state.id ? 'Add Product' : 'Update'}
                     <span className= "fa fa-times-circle text-right" onClick = {this.onClose}>
 
                     </span>
@@ -89,7 +110,7 @@ class TaskForm extends Component {
                         type="text" 
                         className="form-control" 
                         name="name" 
-                        value={this.state.name}
+                        value={this.state.name || ""}
                         onChange = {this.onChange} 
                         />
                     </div>
@@ -129,7 +150,7 @@ class TaskForm extends Component {
                         className="form-control" 
                         required="required"
                         name="Unit" 
-                        value={this.state.Unit}
+                        value={this.state.unit}
                         onChange = {this.onChange}
                         >
                             <option value="pcs">pcs</option>
@@ -142,7 +163,7 @@ class TaskForm extends Component {
                         type="text" 
                         className="form-control"
                         name="Origin" 
-                        value={this.state.Origin}
+                        value={this.state.origin}
                         onChange = {this.onChange} 
                         />
                     </div>
@@ -152,7 +173,7 @@ class TaskForm extends Component {
                         type="number" 
                         className="form-control"
                         name="Warranty" 
-                        value={this.state.Warranty}
+                        value={this.state.warranty}
                         onChange = {this.onChange} 
                         />
                     </div>
@@ -162,7 +183,7 @@ class TaskForm extends Component {
                         type="text" 
                         className="form-control"
                         name="Description" 
-                        value={this.state.Description}
+                        value={this.state.description}
                         onChange = {this.onChange}  
                         />
                     </div>
@@ -196,8 +217,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        onAddProduct : (product) =>{
-            dispatch(actions.addProduct(product));
+        onSaveProduct : (product) =>{
+            dispatch(actions.saveProduct({product}));
         },
         onCloseForm : () => {
             dispatch(actions.closeForm())

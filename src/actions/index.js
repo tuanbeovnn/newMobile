@@ -5,10 +5,10 @@ export const listAll = () => {
     }
 };
 
-export const addProduct = (product) => {
+export const saveProduct = (updateItem) => {
     return {
-        type: types.ADD_PRODUCT,
-        product
+        type: types.SAVE_PRODUCT,
+        updateItem
     }
 } 
 
@@ -41,13 +41,5 @@ export const checkItem = (data) => {
     return {
         type: types.CHECK_ITEM,
         data
-    }
-}
-
-export const updatedItem = (productEdit) => {
-    return {
-        type: types.UPDATE_ITEM,
-        productEdit
-        
     }
 }

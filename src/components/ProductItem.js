@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from './../actions/index';
 
 class ProductItem extends Component {
@@ -10,17 +10,15 @@ class ProductItem extends Component {
     }
 
     onUpdate = () => {
-        
         this.props.onOpenForm();
-        this.props.onUpdateItem(this.props.product); 
-        
+        this.props.onUpdateItem(this.props.product);
     }
 
     render() {
         let { product, index } = this.props;
         return (
             <tr>
-                <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" /></td>
+                <td><input type="checkbox" onChange={e => this.props.checkItem(product.id, e.target.checked)} /></td>
                 <td>{index + 1}</td>
                 <td>{product.productName}</td>
                 <td>{product.price}</td>
@@ -49,25 +47,26 @@ class ProductItem extends Component {
 const mapStateToProps = state => {
     return {
         // chuyen state tu store thanh props cua apps
-        products : state.products
+        products: state.products
     };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        onDeleteItem : (id) => {
+        onDeleteItem: (id) => {
             dispatch(actions.deteleItem(id))
-        }
-        ,onCloseForm : () => {
+        },
+        onCloseForm: () => {
             dispatch(actions.closeForm())
         },
-        onOpenForm : () =>{
+        onOpenForm: () => {
             dispatch(actions.openForm())
         },
-        onUpdateItem : (item) =>{
+        onUpdateItem: (item) => {
             dispatch(actions.saveProduct(item))
-        }
+        },
+        checkItem: (id, checked) => dispatch(actions.checkItem({ id, checked }))
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps) (ProductItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductItem);
 

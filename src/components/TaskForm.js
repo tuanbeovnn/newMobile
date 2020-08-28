@@ -218,7 +218,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         onSaveProduct : (product) =>{
-            dispatch(actions.saveProduct({product}));
+            dispatch(actions.saveProduct(product));
         },
         onCloseForm : () => {
             dispatch(actions.closeForm())

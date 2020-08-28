@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from './../actions/index';
 
 class Sort extends Component {
 
-    onToggleForm = () =>{ 
-        let {updateItem} = this.props;
-        console.log(this.props.updateItem);
-        if(updateItem && updateItem.id !== '') {
+    onToggleForm = () => {
+        let { updateItem } = this.props;
+        if (updateItem && updateItem.id !== '') {
             this.props.onOpenForm();
-        }else{
+        } else {
             this.props.onToggleForm();
         }
-        this.props.onClearProduct(
-            {
-                id: '',
-                name : '',
-                price: '',
-                discountCode: '',
-                Quantity: '',
-                Unit: '',
-                Origin: '',
-                Warranty : '',
-                Description: '',
-                status : false
-            }
-        );
+        // this.props.onClearProduct(
+        //     {
+        //         id: '',
+        //         name : '',
+        //         price: '',
+        //         discountCode: '',
+        //         Quantity: '',
+        //         Unit: '',
+        //         Origin: '',
+        //         Warranty : '',
+        //         Description: '',
+        //         status : false
+        //     }
+        // );
     }
 
     render() {
+        const { deleteAnyItem, checkItem } = this.props;
         return (
             <div className="col-6 display">
                 <div className="col-3">
@@ -45,17 +45,20 @@ class Sort extends Component {
                                 </a>
                             </li>
                             <li>
-                               
-                                    <span className="fa fa-sort-alpha-desc pr-5">
-                                        Name Z-A
+
+                                <span className="fa fa-sort-alpha-desc pr-5">
+                                    Name Z-A
                                 </span>
-                                
+
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div className="col-3">
-                    <button type="submit" className="btn btn-success" onClick={this.onToggleForm}>Add</button>&nbsp;
+                <div className="col-9">
+                    <button type="submit" className="btn btn-success" onClick={this.onToggleForm}>Add</button>&nbsp;&nbsp;&nbsp;
+                    {checkItem.length ? <button type="button" className="btn btn-danger " onClick={() => deleteAnyItem(checkItem)}>Xóa mục đã chọn</button> : ""}
+                </div>
+                <div className="col-4">
                 </div>
             </div>
         );
@@ -65,23 +68,25 @@ class Sort extends Component {
 const mapStateToProps = state => {
     return {
         // chuyen state tu store thanh props cua apps
-        isDisplayForm : state.isDisplayForm,
-        updateItem : state.updateItem
+        isDisplayForm: state.isDisplayForm,
+        updateItem: state.updateItem,
+        checkItem: state.checkItem,
     };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        onToggleForm : () => {
+        onToggleForm: () => {
             dispatch(actions.toggleForm())
         },
-        onClearProduct : (item) =>{
+        onClearProduct: (item) => {
             dispatch(actions.saveProduct(item))
         },
-        onOpenForm : () =>{
+        onOpenForm: () => {
             dispatch(actions.openForm())
-        }
-        
+        },
+        deleteAnyItem: (checkItem) => dispatch(actions.deleteAnyItem(checkItem)),
+
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps) (Sort);
+export default connect(mapStateToProps, mapDispatchToProps)(Sort);

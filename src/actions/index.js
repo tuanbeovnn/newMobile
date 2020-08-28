@@ -10,7 +10,7 @@ export const saveProduct = (updateItem) => {
         type: types.SAVE_PRODUCT,
         updateItem
     }
-} 
+}
 
 export const toggleForm = () => {
     return {
@@ -30,7 +30,6 @@ export const closeForm = () => {
 }
 
 export const deteleItem = (id) => {
-    console.log('id :>> ', id);
     return {
         type: types.DELETE_ITEM,
         id
@@ -40,6 +39,13 @@ export const deteleItem = (id) => {
 export const checkItem = (data) => {
     return {
         type: types.CHECK_ITEM,
-        data
+        ...data
+    }
+}
+
+export const deleteAnyItem = (checkItem) => {
+    return {
+        type: types.DELETE_ANY_ITEM,
+        checkItem
     }
 }
